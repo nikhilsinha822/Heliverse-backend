@@ -25,7 +25,7 @@ const classroomSchema = mongoose.Schema({
             require: true,
             validate: {
                 validator: function (v) {
-                    return /^(?:|(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM))$/.test(v);
+                    return /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/.test(v);
                 },
                 message: props => `${props.value} is not a valid Time!`
             }
@@ -35,7 +35,7 @@ const classroomSchema = mongoose.Schema({
             require: true,
             validate: {
                 validator: function (v) {
-                    return /^(?:|(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM))$/.test(v);
+                    return /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/.test(v);
                 },
                 message: props => `${props.value} is not a valid Time!`
             }

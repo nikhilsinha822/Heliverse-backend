@@ -80,12 +80,52 @@ const createUserTeacher = catchAsyncError(async (req, res, next) => {
     });
 })
 
+const updateUserPrincipal = catchAsyncError(async (req, res, next) => {
+    const { id, email, password } = req.body;
+    if (!id || req.user._id === 'id')
+        return next(new (ErrorHandler("Invalid Request", 400)))
+
+    const user = await User.findById(id);
+    if (!user)
+        return next(new ErrorHandler("User not found", 400))
+
+    if (password) user.password = password;
+    if (email) user.email = email;
+
+    await user.save();
+
+    res.status(200).json({
+        "success": true,
+        "message": "Successfully Updated"
+    })
+})
+
+const updateUserTeacher = catchAsyncError(async (req, res, next) => {
+    const { id, email, password } = req.body;
+    if (!id || req.user._id === 'id')
+        return next(new (ErrorHandler("Invalid Request", 400)))
+
+    const user = await User.findOne({ _id: id, role: "Student" });
+    if (!user)
+        return next(new ErrorHandler("User not found", 400))
+
+    if (password) user.password = password;
+    if (email) user.email = email;
+
+    await user.save();
+
+    res.status(200).json({
+        "success": true,
+        "message": "Successfully Updated"
+    })
+})
+
 const deleteUserPrincipal = catchAsyncError(async (req, res, next) => {
     const { id } = req.body;
     if (!id || req.user._id === 'id')
         return next(new (ErrorHandler("Invalid Request", 400)))
 
-    await User.deleteOne({_id: id});
+    await User.deleteOne({ _id: id });
 
     res.status(200).json({
         "success": true,
@@ -111,5 +151,7 @@ module.exports = {
     createUserPrincipal,
     createUserTeacher,
     deleteUserPrincipal,
-    deleteUserTeacher
+    deleteUserTeacher,
+    updateUserPrincipal,
+    updateUserTeacher
 }

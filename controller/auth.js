@@ -35,6 +35,45 @@ const login = catchAsyncError(async (req, res, next) => {
     })
 })
 
+const createUserPrincipal = catchAsyncError(async (req, res, next) => {
+    const { email, password, role } = req.body;
+    if (!email || !password)
+        return next(new ErrorHandler("Missing required feilds", 400))
+
+    const validRoles = ["Student", "Teacher"]
+    if (!validRoles.includes(role))
+        return next(new ErrorHandler("Requested role is not valid", 400))
+
+    await User.create({
+        email, password, role
+    })
+
+    res.status(200).json({
+        success: true,
+        message: "Successfully created"
+    });
+})
+
+const createUserTeacher = catchAsyncError(async (req, res, next) => {
+    const { email, password, role } = req.body;
+    if (!email || !password)
+        return next(new ErrorHandler("Missing required feilds", 400))
+
+    if (role !== "Student")
+        return next(new ErrorHandler("Requested role is not valid", 400))
+
+    await User.create({
+        email, password, role
+    })
+
+    res.status(200).json({
+        success: true,
+        message: "Successfully created"
+    });
+})
+
 module.exports = {
-    login
+    login,
+    createUserPrincipal,
+    createUserTeacher
 }

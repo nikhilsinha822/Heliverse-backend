@@ -4,19 +4,19 @@ const bcrypt = require('bcrypt');
 const userSchema = mongoose.Schema({
     email: {
         type: String,
-        require: true,
+        required: [true, "Email feild is missing"],
         unique: true
     },
     password: {
         type: String,
-        require: true
+        required: [true, "Password feild is missing"]
     },
     role: {
         type: String,
         default: 'Student',
         enum: ['Student', 'Principal', 'Teacher'],
     }
-})
+}, { timestamps: true })
 
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
@@ -26,7 +26,7 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-userSchema.methods.comparePassword = async function(password) {
+userSchema.methods.comparePassword = async function (password) {
     return bcrypt.compare(password, this.password)
 }
 

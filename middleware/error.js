@@ -8,14 +8,14 @@ const errorMiddleware = (error, req, res, next) => {
         const message = `Resource not found. Invalid: ${error.path}`;
         error = new ErrorHandler(message, 400);
     }
-    else if(error.name === 'TokenExpiredError'){
+    else if (error.name === 'TokenExpiredError') {
         console.log("Token Expired")
         const message = "Token Expired. Please login again";
         error = new ErrorHandler(message, 401);
     }
     else if (error.code === 11000) {
-        const message = `Duplicate ${Object.keys(error.keyValue)} Entered`;
-        error = new ErrorHandler(message, 400);
+        const message = `${Object.keys(error.keyValue)} already exists`;
+        error = new ErrorHandler(message, 409);
     }
 
     res.status(error.statusCode).json({

@@ -19,6 +19,10 @@ const createClassroom = catchAsyncError(async (req, res, next) => {
     if (!name)
         return next(new ErrorHandler("Name of classroom missing", 400))
 
+    const classroom = await Classroom.findOne({ name });
+    if (classroom)
+        return next(new ErrorHandler(`Classroom ${name} already exist`, 400))
+
     if (teacher) {
         const dublicate = await Classroom.findOne({ teacher })
         if (dublicate)

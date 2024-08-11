@@ -16,6 +16,7 @@ app.use(cookeParser());
 connectDB();
 
 app.use('/auth', require('./routes/auth'))
+app.use('/api/classroom', require('./routes/classroom'))
 
 app.use('/*', (req, res) => {
     res.status(404).json({

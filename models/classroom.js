@@ -3,29 +3,42 @@ const mongoose = require('mongoose')
 const classroomSchema = mongoose.Schema({
     name: {
         type: String,
-        require: true
+        required: [true, "Classroom name is required"]
     },
-    teacher:{
+    teacher: {
         type: mongoose.Schema.ObjectId,
-        ref: "User"
+        ref: "User",
     },
-    students:[{
+    students: [{
         type: mongoose.Schema.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        unique: true
     }],
-    schedule:[{
+    schedule: [{
         day: {
             type: String,
             enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-            require: true
+            required: true
         },
-        startTime:{
+        startTime: {
             type: String,
-            require: true
+            require: true,
+            validate: {
+                validator: function (v) {
+                    return /^(?:|(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM))$/.test(v);
+                },
+                message: props => `${props.value} is not a valid Time!`
+            }
         },
-        endTime:{
+        endTime: {
             type: String,
-            require: true
+            require: true,
+            validate: {
+                validator: function (v) {
+                    return /^(?:|(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM))$/.test(v);
+                },
+                message: props => `${props.value} is not a valid Time!`
+            }
         }
     }]
 })

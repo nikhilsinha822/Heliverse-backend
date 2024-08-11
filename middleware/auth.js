@@ -3,10 +3,11 @@ const jwt = require('jsonwebtoken');
 const ErrorHandler = require('../utils/ErrorHandler');
 const User = require('../models/user');
 
-const verifyRole = (role) => {
+const verifyRole = (roles) => {
     return (req, res, next) => {
-        if (req.user.role != role)
-            return next(new ErrorHandler('You are not allwoed for this operation', 403))
+        if (!roles.some((role) => req.user.role.includes(role))) {
+            return next(new ErrorHandler("You are not authorized to access this route", 403))
+        }
         next();
     }
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 const { verifyRole, verifyJWT } = require('../middleware/auth');
-const { getClassroom, createClassroom, assignTeacher, assignStudents } = require('../controller/classroom');
+const { getClassroom, createClassroom, assignTeacher, assignStudents, getStudentList } = require('../controller/classroom');
 const router = express.Router();
 
 router.route('/')
@@ -8,6 +8,9 @@ router.route('/')
 
 router.route('/create')
     .post(verifyJWT, verifyRole(['Principal']), createClassroom)
+
+router.route('/participants/:classroomId')
+    .get(verifyJWT, getStudentList)
 
 router.route('/addTeacher/:classroomId')
     .put(verifyJWT, verifyRole(['Principal']), assignTeacher)

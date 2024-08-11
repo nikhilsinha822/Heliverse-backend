@@ -94,9 +94,27 @@ const assignStudents = catchAsyncError(async (req, res, next) => {
     })
 })
 
+const getStudentList = catchAsyncError(async (req, res, next) => {
+    const { classroomId } = req.params;
+
+    if (!classroomId)
+        return next(new ErrorHandler("Classroom is missing", 400));
+
+    const studentList = await Classroom.findById(classroomId)
+        .select('students').populate("students", "-password -role");
+    if (!studentList)
+        return next(new ErrorHandler("Classorom not found", 400))
+
+    res.status(200).json({
+        success: true,
+        data: studentList
+    })
+})
+
 module.exports = {
     getClassroom,
     createClassroom,
     assignTeacher,
-    assignStudents
+    assignStudents,
+    getStudentList
 }

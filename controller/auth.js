@@ -44,13 +44,17 @@ const createUserPrincipal = catchAsyncError(async (req, res, next) => {
     if (!validRoles.includes(role))
         return next(new ErrorHandler("Requested role is not valid", 400))
 
-    await User.create({
+    const user = await User.create({
         email, password, role
     })
 
     res.status(200).json({
         success: true,
-        message: "Successfully created"
+        message: "Successfully created",
+        data: {
+            _id: user._id,
+            email: user.email
+        }
     });
 })
 
@@ -62,18 +66,50 @@ const createUserTeacher = catchAsyncError(async (req, res, next) => {
     if (role !== "Student")
         return next(new ErrorHandler("Requested role is not valid", 400))
 
-    await User.create({
+    const user = await User.create({
         email, password, role
     })
 
     res.status(200).json({
         success: true,
-        message: "Successfully created"
+        message: "Successfully created",
+        data: {
+            _id: user._id,
+            email: user.email
+        }
     });
+})
+
+const deleteUserPrincipal = catchAsyncError(async (req, res, next) => {
+    const { id } = req.body;
+    if (!id || req.user._id === 'id')
+        return next(new (ErrorHandler("Invalid Request", 400)))
+
+    await User.deleteOne({_id: id});
+
+    res.status(200).json({
+        "success": true,
+        "message": "Successfully Deleted"
+    })
+})
+
+const deleteUserTeacher = catchAsyncError(async (req, res, next) => {
+    const { id } = req.body;
+    if (!id || req.user._id === 'id')
+        return next(new (ErrorHandler("Invalid Request", 400)))
+
+    await User.deleteOne({ _id: id, role: "Student" });
+
+    res.status(200).json({
+        "success": true,
+        "message": "Successfully Deleted"
+    })
 })
 
 module.exports = {
     login,
     createUserPrincipal,
-    createUserTeacher
+    createUserTeacher,
+    deleteUserPrincipal,
+    deleteUserTeacher
 }

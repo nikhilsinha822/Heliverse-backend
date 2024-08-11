@@ -5,10 +5,10 @@ const { verifyRole, verifyJWT } = require('../middleware/auth')
 
 router.route('/login').post(login)
 
-router.route('/principal/user', verifyJWT, verifyRole("Principal"))
-    .post(createUserPrincipal);
+router.route('/principal/user')
+    .post(verifyJWT, verifyRole("Principal"),createUserPrincipal);
 
-router.route('/teacher/user', verifyJWT, verifyRole("Teacher"))
-    .post(createUserTeacher);
+router.route('/teacher/user')
+    .post(verifyJWT, verifyRole("Teacher"), createUserTeacher);
 
 module.exports = router

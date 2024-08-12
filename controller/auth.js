@@ -48,6 +48,22 @@ const logout = catchAsyncError(async (req, res, next) => {
     res.json({ message: 'Cookie cleared' });
 })
 
+const getStudentList = catchAsyncError(async (req, res, next) => {
+    const students = await User.find({ role: "Student" }).select('-password -role');
+    res.json({
+        success: true,
+        data: students
+    })
+})
+
+const getTeacherList = catchAsyncError(async (req, res, next) => {
+    const teachers = await User.find({ role: "Teacher" }).select("-password -role");
+    res.json({
+        success: true,
+        data: teachers
+    })
+})
+
 const createUserPrincipal = catchAsyncError(async (req, res, next) => {
     const { email, password, role } = req.body;
     if (!email || !password)
@@ -161,6 +177,8 @@ const deleteUserTeacher = catchAsyncError(async (req, res, next) => {
 
 module.exports = {
     login, logout,
+    getStudentList,
+    getTeacherList,
     createUserPrincipal,
     createUserTeacher,
     deleteUserPrincipal,

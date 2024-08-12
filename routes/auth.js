@@ -1,15 +1,18 @@
 const express = require('express')
 const router = express.Router();
-const { login,
+const { login, 
     createUserPrincipal,
     createUserTeacher,
     deleteUserPrincipal,
     deleteUserTeacher,
     updateUserPrincipal,
-    updateUserTeacher } = require('../controller/auth')
+    updateUserTeacher, 
+    logout} = require('../controller/auth')
 const { verifyRole, verifyJWT } = require('../middleware/auth')
 
 router.route('/login').post(login)
+
+router.route('/logout').post(logout)
 
 router.route('/principal/user')
     .post(verifyJWT, verifyRole(["Principal"]), createUserPrincipal)

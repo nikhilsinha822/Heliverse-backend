@@ -31,8 +31,21 @@ const login = catchAsyncError(async (req, res, next) => {
     })
 
     res.status(200).json({
-        success: true
+        success: true,
+        data: {
+            redirect: "dashboard/" + user.role.toLowerCase()
+        }
     })
+})
+
+const logout = catchAsyncError(async (req, res, next) => {
+    if (!req?.cookies?.jwt) return res.sendStatus(204);
+    res.clearCookie('jwt', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None'
+    })
+    res.json({ message: 'Cookie cleared' });
 })
 
 const createUserPrincipal = catchAsyncError(async (req, res, next) => {
@@ -147,7 +160,7 @@ const deleteUserTeacher = catchAsyncError(async (req, res, next) => {
 })
 
 module.exports = {
-    login,
+    login, logout,
     createUserPrincipal,
     createUserTeacher,
     deleteUserPrincipal,

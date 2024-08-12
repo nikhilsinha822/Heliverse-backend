@@ -112,7 +112,7 @@ const createUserTeacher = catchAsyncError(async (req, res, next) => {
 const updateUserPrincipal = catchAsyncError(async (req, res, next) => {
     const { id, email, password } = req.body;
     if (!id || req.user._id === 'id')
-        return next(new (ErrorHandler("Invalid Request", 400)))
+        return next(new ErrorHandler("Invalid Request", 400))
 
     const user = await User.findById(id);
     if (!user)
@@ -152,7 +152,7 @@ const updateUserTeacher = catchAsyncError(async (req, res, next) => {
 const deleteUserPrincipal = catchAsyncError(async (req, res, next) => {
     const { id } = req.body;
     if (!id || req.user._id === 'id')
-        return next(new (ErrorHandler("Invalid Request", 400)))
+        return next(new ErrorHandler("Invalid Request", 400))
 
     await User.deleteOne({ _id: id });
 
@@ -165,7 +165,7 @@ const deleteUserPrincipal = catchAsyncError(async (req, res, next) => {
 const deleteUserTeacher = catchAsyncError(async (req, res, next) => {
     const { id } = req.body;
     if (!id || req.user._id === 'id')
-        return next(new (ErrorHandler("Invalid Request", 400)))
+        return next(new ErrorHandler("Invalid Request", 400))
 
     await User.deleteOne({ _id: id, role: "Student" });
 

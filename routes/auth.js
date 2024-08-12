@@ -19,6 +19,8 @@ router.route('/logout').post(logout)
 router.route('/principal/user')
     .post(verifyJWT, verifyRole(["Principal"]), createUserPrincipal)
     .put(verifyJWT, verifyRole(["Principal"]), updateUserPrincipal)
+    
+router.route('/principal/user/:id')
     .delete(verifyJWT, verifyRole(["Principal"]), deleteUserPrincipal)
 
 router.route('/principal/students').get(verifyJWT, verifyRole(["Principal"]), getStudentList)
@@ -27,6 +29,8 @@ router.route('/principal/teachers').get(verifyJWT, verifyRole(["Principal"]), ge
 router.route('/teacher/user')
     .post(verifyJWT, verifyRole(["Principal", "Teacher"]), createUserTeacher)
     .put(verifyJWT, verifyRole(["Principal", "Teacher"]), updateUserTeacher)
+
+router.route('/teacher/user/:id')
     .delete(verifyJWT, verifyRole(["Principal", "Teacher"]), deleteUserTeacher)
 
 module.exports = router

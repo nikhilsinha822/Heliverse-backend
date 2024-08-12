@@ -150,7 +150,7 @@ const updateUserTeacher = catchAsyncError(async (req, res, next) => {
 })
 
 const deleteUserPrincipal = catchAsyncError(async (req, res, next) => {
-    const { id } = req.body;
+    const { id } = req.params;
     if (!id || req.user._id === 'id')
         return next(new ErrorHandler("Invalid Request", 400))
 
@@ -163,7 +163,7 @@ const deleteUserPrincipal = catchAsyncError(async (req, res, next) => {
 })
 
 const deleteUserTeacher = catchAsyncError(async (req, res, next) => {
-    const { id } = req.body;
+    const { id } = req.params;
     if (!id || req.user._id === 'id')
         return next(new ErrorHandler("Invalid Request", 400))
 

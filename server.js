@@ -8,9 +8,12 @@ const connectDB = require('./config/dbConfig')
 const errorMiddleware = require('./middleware/error')
 const cookeParser = require('cookie-parser')
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+app.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+}))
 app.use(cookeParser());
 
 connectDB();
